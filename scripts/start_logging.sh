@@ -23,7 +23,13 @@ pipe_pane_sed_osx() {
 }
 
 pipe_pane_sed() {
-	local ansi_codes="(\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]|)"
+    # Original replacement 
+	# local ansi_codes="(\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]|)"
+
+    # My new one leaves color codes in, which makes the display appear better                                                                                                  
+    # In tests, logs are still easily greppable                                                                                                                                
+    local ansi_codes="(\x1b\[[0-9?]\+[^m0-9?])"                                                                                                                                
+
 	tmux pipe-pane "exec cat - | sed -r 's/$ansi_codes//g' >> $FILE"
 }
 
